@@ -10,14 +10,17 @@ import { BookModule } from './book/book.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.${process.env.NODE_ENV}.env`,
+      envFilePath: '.env',
+      isGlobal: true,
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('dev', 'prod', 'test').default('dev'),
         DATABASE_HOST: Joi.string().required(),
-        DATABASE_PORT: Joi.number().required().default(5432),
+        DATABASE_PORT: Joi.number().required(),
         DATABASE_USER: Joi.string().required(),
         DATABASE_PASSWORD: Joi.string().required(),
         DATABASE_NAME: Joi.string().required(),
+        NODE_ENV: Joi.string().valid('dev', 'prod', 'test').default('dev'),
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRES_IN: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -30,16 +33,14 @@ import { BookModule } from './book/book.module';
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-         entities: [__dirname + '/**/*.entity{.ts,.js}'], 
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
         ssl: {
           rejectUnauthorized: false,
         },
       }),
     }),
-   
     AuthModule,
-   
     BookModule,
   ],
   controllers: [AppController],
