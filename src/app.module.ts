@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import { BookModule } from './book/book.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,6 +39,8 @@ import { JwtModule } from '@nestjs/jwt';
     }),
    
     AuthModule,
+   
+    BookModule,
   ],
   controllers: [AppController],
   providers: [AppService],
